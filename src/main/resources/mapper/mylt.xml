@@ -1,0 +1,60 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="python.mylt">
+    <resultMap id="myltVo" type="com.data.model.Mylt">
+        <result property="id" column="id"></result>
+        <result property="tzname" column="tzname"></result>
+        <result property="tzreply" column="tzreply"></result>
+        <result property="tzlink" column="tzlink"></result>
+        <result property="tztime" column="tztime"></result>
+        <result property="blockFlag" column="block_flag"></result>
+        <result property="createAt" column="create_time"></result>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.data.model.Mylt" useGeneratedKeys="false">
+        INSERT INTO python_data.mylt (id, tzname, tzreply, tztime,tzlink, block_flag, create_time)
+        VALUES (#{id}, #{tzname}, #{tzreply}, #{tztime},#{tzlink}, #{blockFlag}, #{createAt})
+    </insert>
+
+    <select id="query" parameterType="java.util.Map" resultMap="myltVo">
+        SELECT id, tzname, tzreply, tztime,tzlink, block_flag, create_time
+        FROM python_data.mylt
+        WHERE 1 = 1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="tzname != null">
+            AND tzname = #{tzname}
+        </if>
+        <if test="tzreply != null">
+            AND tzreply = #{tzreply}
+        </if>
+        <if test="tztime != null">
+            AND tztime = #{tztime}
+        </if>
+        <if test="tzlink != null">
+            AND tzlink = #{tzlink}
+        </if>
+        <if test="blockFlag != null">
+            AND block_flag = #{blockFlag}
+        </if>
+        <if test="createDate != null">
+            AND create_time >= #{createDate}
+        </if>
+        order by tzreply desc
+    </select>
+
+    <update id="update" parameterType="com.data.model.Mylt">
+        UPDATE python_data.mylt
+        <set>
+            <if test="blockFlag != null">
+                block_flag = #{blockFlag},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.util.Date">
+        DELETE FROM python_data.mylt
+        WHERE to_days(create_time)= to_days(#{createAt})
+    </delete>
+</mapper>
